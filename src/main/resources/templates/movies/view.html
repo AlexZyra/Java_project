@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movie Details</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 th:text="${movie.title}">Movie Title</h1>
+            <p><strong>Year:</strong> <span th:text="${movie.year}"></span></p>
+            <p><strong>Genre:</strong> <span th:text="${movie.genre != null ? movie.genre.name : 'No Genre'}"></span></p>
+
+            <h3>Reviews</h3>
+            <div th:if="${movie.reviews.empty}">
+                <p>No reviews yet.</p>
+            </div>
+            <div th:each="review : ${movie.reviews}">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p th:text="${review.comment}"></p>
+                        <a th:href="@{/reviews/delete/{movieId}/{reviewId}(movieId=${movie.id}, reviewId=${review.id})}"
+                           class="btn btn-sm btn-danger">Delete Review</a>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Add Review</h4>
+            <form th:action="@{/reviews/add/{movieId}(movieId=${movie.id})}" method="post">
+                <div class="mb-3">
+                    <textarea name="comment" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Review</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Actions</h5>
+                    <a th:href="@{/movies/edit/{id}(id=${movie.id})}" class="btn btn-warning w-100 mb-2">Edit Movie</a>
+                    <a th:href="@{/movies}" class="btn btn-secondary w-100">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
